@@ -41,22 +41,22 @@ services:
       - "-user=admin"
       - "-pass=123456"
       - "-passive-ports=30000-30009"
-  sftp:
-    image: atmoz/sftp:latest
-    ports:
-      - "2222:22"
-    volumes:
-      - "./testdata/sftp-server:/home/demo"
-    command:
-      - "demo:password:::"
-  smtp:
-    image: oryd/mailslurper:latest-smtps
-    ports:
-      - '1025:1025'
-      - '4444:4436'
-      - '4445:4437'
+  # sftp:
+  #   image: atmoz/sftp:latest
+  #   ports:
+  #     - "2222:22"
+  #   volumes:
+  #     - "./testdata/sftp-server:/home/demo"
+    # command:
+    #   - "demo:password:::"
+  # smtp:
+  #   image: oryd/mailslurper:latest-smtps
+  #   ports:
+  #     - '1025:1025'
+  #     - '4444:4436'
+  #     - '4445:4437'
   paygate:
-    image: moov/paygate:v0.9.0-dev7
+    image: moov/paygate:v0.10.0
     ports:
       - "8082:8082"
       - "9092:9092"

@@ -30,8 +30,9 @@ var (
 	Organization = "moov"
 	RequestID    = base.ID()
 
-	TeachersFCU = "221475786"
-	ChaseCO     = "102001017"
+	TeachersFCU  = "221475786"
+	ChaseCO      = "102001017"
+	EastWestBank = "322070381"
 )
 
 func CreateCustomer(first, last, email string) (*customers.Customer, error) {
@@ -198,11 +199,11 @@ func GetMicroDeposits(account *customers.Account) (*client.MicroDeposits, error)
 	return &microDeposits, err
 }
 
-func MakeTransfer(sourceCustomer *customers.Customer, sourceCustomerAccount *customers.Account, destCustomer *customers.Customer, destCustomerAccount *customers.Account) (*client.Transfer, error) {
+func MakeTransfer(amount int, sourceCustomer *customers.Customer, sourceCustomerAccount *customers.Account, destCustomer *customers.Customer, destCustomerAccount *customers.Account) (*client.Transfer, error) {
 	var jsonData = map[string]interface{}{
 		"amount": map[string]interface{}{
 			"currency": "USD",
-			"value":    125,
+			"value":    amount,
 		},
 		"source": map[string]string{
 			"customerID": sourceCustomer.CustomerID,

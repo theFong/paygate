@@ -5,44 +5,44 @@ customers:
   accounts:
     decryptor:
       symmetric:
-        # INSECURE KEY -- Do not use in production!
         keyURI: 'base64key://MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI='
-  debug: false
+  debug: true
 database:
   sqlite:
     path: "paygate.db"
 odfi:
-  routingNumber: "221475786"
+  routingNumber: "322070381"
+  outboundFilenameTemplate: '{{ date "20060102150405" }}-{{ .RoutingNumber }}.ach{{ if .GPG }}.gpg{{ end }}'  # yyyyMMddHHmmss-routingnumber.ach
   gateway:
     # origin is often an ABA routing number
-    origin: "221475786"
+    origin: "322070381"
     # origin_name is the name of your ODFI
-    originName: "Teachers FCU"
+    originName: "MyODFI"
     # destination can be the ABA routing number of the Federal Reserve bank used
-    destination: "071000301"
+    destination: "322070381"
     # destination_name would be name of Federal Reserve bank used
-    destinationName: "FRBATLANTA"
-  inboundPath: "./inbound/"
-  outboundPath: "./outbound/"
-  returnPath: "./returned/"
+    destinationName: "EAST WEST BANK"
+  inboundPath: "./"
+  outboundPath: "./ACHPAYMENTSIMPORT/"
+  returnPath: "./"
   cutoffs:
-    timezone: "America/New_York"
+    timezone: "America/Los_Angeles"
     windows:
-      - "16:20" # 4:20pm EST
+      - "16:00" # 4:00pm PST 
   inbound:
     interval: "10m"
   fileConfig:
     batchHeader:
-      companyIdentification: "MoovZZZZZZ"
-    balanceEntries: true
-  ftp:
-    hostname: "ftp:2121"
-    username: "admin"
-    password: "123456"
+      companyIdentification: "1833623200"
+    balanceEntries: false
   # sftp:
   #   hostname: "sftp:22"
   #   username: "demo"
   #   password: "password"
+  ftp:
+    hostname: "ftp:2121"
+    username: "admin"
+    password: "123456"
   storage:
     cleanupLocalDirectory: true
     keepRemoteFiles: false
@@ -52,29 +52,14 @@ odfi:
 transfers:
   limits:
     fixed:
-      softLimit: 500000  #  $5,000.00
-      hardLimit: 1000000 # $10,000.00
-validation:
-  microDeposits:
-    source:
-      customerID: "replace-me"
-      accountID: "replace-me"
-      organization: "replace-me"
+      softLimit: "500000"  #  $5,000.00
+      hardLimit: "1000000" # $10,000.00
 pipeline:
-  merging:
-    directory: "/storage/"
-    flattenBatches:
-      enable: true
   output:
     format: "nacha"
   stream:
     inmem:
       url: 'mem://paygate'
-  notifications:
-    email:
-      from: "noreply@moov.io"
-      to:
-        - "jane@moov.io"
-        - "john@moov.io"
-      connectionURI: "smtps://test:test@localhost:1025/?insecure_skip_verify=true"
-      companyName: "Moov"
+  merging:
+    flattenBatches:
+      enable: true
